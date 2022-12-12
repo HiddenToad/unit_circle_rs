@@ -81,7 +81,7 @@ fn view(app: &App, model: &Model, frame: Frame) {
     let draw = app.draw();
     draw.background().color(WHITE);
 
-    let point = to_circle_point(model.circle.angle);
+    let point = to_circle_point(model.circle.angle + 90. % 360.);
 
     //x axis line
     draw.line()
@@ -120,7 +120,7 @@ fn view(app: &App, model: &Model, frame: Frame) {
         .color(ORANGE);
 
     //angle text
-    draw.text(&format!("angle: {}°", model.circle.angle))
+    draw.text(&format!("angle: {}°", 360. - model.circle.angle))
         .color(RED)
         .font_size(25)
         .xy(app.window_rect().top_left() + pt2(160., -20.))
@@ -128,7 +128,7 @@ fn view(app: &App, model: &Model, frame: Frame) {
         .width(300.);
 
     //sin text
-    draw.text(&format!("sin: {}", deg_to_rad(model.circle.angle).sin()))
+    draw.text(&format!("sin: {}", deg_to_rad(360. - model.circle.angle).sin()))
         .color(BLUE)
         .font_size(25)
         .xy(app.window_rect().top_left() + pt2(160., -50.))
@@ -136,7 +136,7 @@ fn view(app: &App, model: &Model, frame: Frame) {
         .width(300.);
 
     //cos text
-    draw.text(&format!("cos: {}", deg_to_rad(model.circle.angle).cos()))
+    draw.text(&format!("cos: {}", deg_to_rad(360. - model.circle.angle).cos()))
         .color(ORANGE)
         .font_size(25)
         .xy(app.window_rect().top_left() + pt2(160., -80.))
