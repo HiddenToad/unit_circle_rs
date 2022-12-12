@@ -101,7 +101,9 @@ fn view(app: &App, model: &Model, frame: Frame) {
 
 
     //the point at which the theta line ends
-    let point = to_circle_point(model.circle.angle);
+    let point = to_circle_point(model.circle.angle + 90. % 360.);
+
+
 
 
     //x axis line
