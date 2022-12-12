@@ -2,21 +2,32 @@ use nannou::prelude::*;
 use nannou::winit::event::VirtualKeyCode;
 
 fn main() {
+    //run our app
     nannou::app(model).run();
 }
 
+//the radius of the unit circle
 const RADIUS: f32 = 200.;
 
+
+//the unit circle itself
 struct UnitCircle {
+    //the angle of theta
     angle: f32,
 }
 
+
+//our app's data model,
+//consists of the window, the unit circle, 
+//and stores the position of the points that
+//make it up for reuse
 struct Model {
     _window: window::Id,
     circle: UnitCircle,
     points: [(Vec2, Rgb<u8>); 361],
 }
 
+//construct the model
 fn model(app: &App) -> Model {
     Model {
         _window: app.new_window().event(event).view(view).build().unwrap(),
@@ -30,10 +41,12 @@ fn model(app: &App) -> Model {
     }
 }
 
+//on receiving an input event, run
 fn event(_: &App, model: &mut Model, event: WindowEvent) {
     match event {
         WindowEvent::KeyPressed(key) => {
             match key {
+                //if keycode is A move left
                 VirtualKeyCode::A => match model.circle.angle as u32 {
                     0..=90 | 271..=360 => {
                         if model.circle.angle >= 1. {
@@ -49,6 +62,7 @@ fn event(_: &App, model: &mut Model, event: WindowEvent) {
                         unreachable!()
                     }
                 },
+                //if keycode is d move right
                 VirtualKeyCode::D => match model.circle.angle as u32 {
                     0..=90 | 271..=360 => {
                         model.circle.angle += 1.;
@@ -57,6 +71,7 @@ fn event(_: &App, model: &mut Model, event: WindowEvent) {
                         if model.circle.angle >= 1. {
                             model.circle.angle -= 1.;
                         } else {
+                            //wrap to positive, 360
                             model.circle.angle = 359.;
                         }
                     }
@@ -66,21 +81,25 @@ fn event(_: &App, model: &mut Model, event: WindowEvent) {
                 },
                 _ => {}
             }
+            //force angle to wrap to 360
             model.circle.angle %= 360.;
         }
         _ => {}
     }
 }
 
+//given circle point #n, return its x and y
 fn to_circle_point(i: f32) -> Vec2 {
     let rad = deg_to_rad(i);
     Vec2::new(rad.sin() * RADIUS, rad.cos() * RADIUS)
 }
 
+//creates the app's view once per frame.
 fn view(app: &App, model: &Model, frame: Frame) {
     let draw = app.draw();
     draw.background().color(WHITE);
 
+    //the point at which the theta line ends
     let point = to_circle_point(model.circle.angle);
 
     //x axis line
@@ -143,5 +162,6 @@ fn view(app: &App, model: &Model, frame: Frame) {
         .left_justify()
         .width(300.);
 
+    //write all the contents of the draw handle to our app's window
     draw.to_frame(app, &frame).unwrap();
 }
