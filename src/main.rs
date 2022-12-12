@@ -47,7 +47,7 @@ fn event(_: &App, model: &mut Model, event: WindowEvent) {
         WindowEvent::KeyPressed(key) => {
             match key {
                 //if keycode is A move left
-                VirtualKeyCode::A => match model.circle.angle as u32 + 90 % 360 {
+                VirtualKeyCode::A => match (model.circle.angle as u32 + 90) % 360 {
                     0..=90 | 271..=360 => {
                         if model.circle.angle >= 1. {
                             model.circle.angle -= 1.;
@@ -63,7 +63,7 @@ fn event(_: &App, model: &mut Model, event: WindowEvent) {
                     }
                 },
                 //if keycode is d move right
-                VirtualKeyCode::D => match model.circle.angle as u32 + 90 % 360{
+                VirtualKeyCode::D => match (model.circle.angle as u32 + 90) % 360 {
                     0..=90 | 271..=360 => {
                         model.circle.angle += 1.;
                     }
@@ -71,7 +71,7 @@ fn event(_: &App, model: &mut Model, event: WindowEvent) {
                         if model.circle.angle >= 1. {
                             model.circle.angle -= 1.;
                         } else {
-                            //wrap to positive, 360
+                            //wrap to positive deg, 360
                             model.circle.angle = 359.;
                         }
                     }
